@@ -2,12 +2,11 @@ import axios from "axios";
 
 const useAxios = () => {
   console.log(import.meta.VITE_BASE_URL);
-  const response = async ({ url, method = "GET", body, headers, params }) => {
+  const response = async ({ url, method = "GET", data, headers, params }) => {
     return axios({
-      // url: `${import.meta.VITE_BASE_URL}${url}`,
-      url: `https://api.users.kasanabozor.uz${url}`,
+      url: `${import.meta.env.VITE_BASE_URL}${url}`,
       method,
-      data: body,
+      data,
       headers: {
         Authorization: `Bearer${localStorage.getItem("token")}`,
         "Content-Type": "application/json",
@@ -24,6 +23,3 @@ const useAxios = () => {
 };
 
 export default useAxios;
-
-// https://api.users.kasanabozor.uz/api/accounts/register/step1
-// https://api.users.kasanabozor.uz/api/accounts/register/step1 
