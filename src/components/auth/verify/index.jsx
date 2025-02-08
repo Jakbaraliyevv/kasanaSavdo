@@ -24,12 +24,12 @@ function Verify() {
   };
 
   return (
-    <section className="w-full m-auto flex items-center justify-center flex-col">
+    <section className="w-[50%] m-auto flex items-center h-[100vh] justify-center flex-col">
       <Form
         name="basic"
         style={{
           maxWidth: 600,
-          width: "100%",
+          width: "40%",
         }}
         initialValues={{
           remember: true,
@@ -55,7 +55,7 @@ function Verify() {
           />
         </Form.Item>
 
-        <Flex gap="middle" align="flex-start" vertical>
+        <Flex gap="middle" align="flex-center" justify="center" vertical>
           <h3 className="text-black">Tasdiqlash kodini kiriting :</h3>
           <Input.OTP
             length={5}
@@ -65,7 +65,7 @@ function Verify() {
         </Flex>
 
         <Form.Item label={null}>
-          <button className="w-full bg-blue-500 h-[33px] rounded-md text-[#FFF] text-[17px]">
+          <button className="w-full bg-blue-500 h-[33px] mt-7 rounded-md text-[#FFF] text-[17px]">
             Submit
           </button>
         </Form.Item>
