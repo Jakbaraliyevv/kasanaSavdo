@@ -1,14 +1,33 @@
-import React from "react";
+import React, { useState } from "react";
 import { Checkbox, Form, Input } from "antd";
+import useAxios from "../../../hook/useAxios";
 const googleSvg = "/public/google29.png";
 const facebookSvg = "/facebook.svg";
 
 function Register() {
-  const onFinish = (values) => {
-    console.log("Success:", values);
-  };
-  const onFinishFailed = (errorInfo) => {
-    console.log("Failed:", errorInfo);
+  const [number, setNumber] = useState("");
+  const [password, setPassword] = useState("");
+
+  const axios = useAxios();
+
+  const getValue = () => {
+    const userData = {
+      password: password,
+      phone: `+998${number}`,
+    };
+    console.log(userData);
+    axios({
+      url: "/api/accounts/register/step1/",
+      method: "POST",
+      data: userData,
+    })
+      .then((data) =>
+        console.log(
+          "Xatolik tafsilotlari:",
+          JSON.stringify(data.errors, null, 2)
+        )
+      )
+      .catch((error) => console.log(error, "Xato kettida"));
   };
 
   const icon_style =
@@ -24,13 +43,11 @@ function Register() {
         initialValues={{
           remember: true,
         }}
-        onFinish={onFinish}
-        onFinishFailed={onFinishFailed}
         autoComplete="off"
       >
         <Form.Item
           label="Number"
-          name="username"
+          name="phone"
           rules={[
             {
               required: true,
@@ -39,6 +56,7 @@ function Register() {
           ]}
         >
           <Input
+            onChange={(e) => setNumber(e.target.value)}
             type="number"
             placeholder="Enter your number"
             addonBefore="+998"
@@ -55,7 +73,10 @@ function Register() {
             },
           ]}
         >
-          <Input.Password placeholder="Enter your password" />
+          <Input.Password
+            onChange={(e) => setPassword(e.target.value)}
+            placeholder="Enter your password"
+          />
         </Form.Item>
 
         <Form.Item name="remember" valuePropName="checked" label={null}>
@@ -63,7 +84,10 @@ function Register() {
         </Form.Item>
 
         <Form.Item label={null}>
-          <button className="w-full bg-blue-500 h-[33px] rounded-md text-[#FFF] text-[17px]">
+          <button
+            onClick={() => getValue()}
+            className="w-full bg-blue-500 h-[33px] rounded-md text-[#FFF] text-[17px]"
+          >
             Submit
           </button>
         </Form.Item>
