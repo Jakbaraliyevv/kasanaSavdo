@@ -1,7 +1,6 @@
 import React from "react";
 
 import { Flex, Form, Input } from "antd";
-import Title from "antd/es/skeleton/Title";
 
 function Verify() {
   const onChange = (text) => {
@@ -57,7 +56,7 @@ function Verify() {
         </Form.Item>
 
         <Flex gap="middle" align="flex-start" vertical>
-          <Title level={5}>Tasdiqlash kodini kiriting</Title>
+          <h3 className="text-black">Tasdiqlash kodini kiriting :</h3>
           <Input.OTP
             length={5}
             formatter={(str) => str.toUpperCase()}

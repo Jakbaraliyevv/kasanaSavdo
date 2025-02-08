@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Login from "./login";
 import Register from "./register";
+import Verify from "./verify";
 
 function Auth() {
   const [active, setActive] = useState(true);
@@ -26,7 +27,7 @@ function Auth() {
         </h1>
       </div>
 
-      <div className="w-full">{active ? <Login /> : <Register />}</div>
+      <div className="w-full">{active ? <Login /> : <Verify />}</div>
     </section>
   );
 }
