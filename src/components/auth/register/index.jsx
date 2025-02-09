@@ -36,7 +36,6 @@ function Register() {
           notify({ type: "errorMessage", text: errorMessages });
         } else {
           navigate("/verifly");
-          notify({ type: "register" });
         }
       })
       .catch((error) => {
@@ -106,7 +105,7 @@ function Register() {
             onClick={() => getValue()}
             className="w-full bg-blue-500 h-[33px] rounded-md text-[#FFF] text-[17px]"
           >
-            Submit
+            Register
           </button>
         </Form.Item>
       </Form>

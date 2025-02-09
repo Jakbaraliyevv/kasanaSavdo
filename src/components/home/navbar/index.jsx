@@ -2,8 +2,6 @@ import React, { useState } from "react";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import LogoutModal from "./modal";
 
-const logo = "/public/Logo.svg";
-
 function NavbarComponents() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const navigate = useNavigate();
@@ -28,7 +26,9 @@ function NavbarComponents() {
       <section className="w-[90%] m-auto flex items-center justify-between py-4">
         <div>
           <Link to={"/home"}>
-            <img src={logo} alt="Logo" />
+            <h1 className="text-[36px] font-medium text-green-500">
+              K A S A N A
+            </h1>
           </Link>
         </div>
         <div className="flex items-center gap-7">

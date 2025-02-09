@@ -86,10 +86,12 @@ function Login() {
           ]}
         >
           <Input
+            className="loginPAssword"
             onChange={(e) => setNumber(e.target.value)}
             type="number"
             placeholder="Enter your number"
-            addonBefore="+998"
+            // addonBefore="+998"
+            addonBefore={<span className="custom-addon-before">+998</span>}
           />
         </Form.Item>
 
@@ -104,6 +106,7 @@ function Login() {
           ]}
         >
           <Input.Password
+            className="loginPAssword"
             onChange={(e) => setPassword(e.target.value)}
             placeholder="Enter your password"
           />
@@ -118,7 +121,7 @@ function Login() {
             onClick={() => getUserData()}
             className="w-full bg-blue-500 h-[33px] rounded-md text-[#FFF] text-[17px]"
           >
-            Submit
+            Login
           </button>
         </Form.Item>
       </Form>
