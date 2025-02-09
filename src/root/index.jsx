@@ -1,6 +1,7 @@
 import { createBrowserRouter } from "react-router-dom";
 import Auth from "../components/auth";
 import Verify from "../components/auth/verify";
+import Home from "../pages/home";
 
 const root = createBrowserRouter([
   {
@@ -10,6 +11,10 @@ const root = createBrowserRouter([
   {
     path: "/verifly",
     element: <Verify />,
+  },
+  {
+    path: "/home",
+    element: <Home />,
   },
 ]);
 

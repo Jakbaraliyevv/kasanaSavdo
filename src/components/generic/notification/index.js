@@ -19,6 +19,22 @@ const notificationApi = () => {
         return notification.error({
           message: catchErorror,
         });
+      case "login":
+        return notification.success({
+          message: "Login Succsess",
+        });
+      case "errLogin":
+        return notification.error({
+          message: " Nomer yoki parol noto‘g‘ri",
+        });
+      case "set":
+        return notification.error({
+          message: "Server bilan bog‘lanishda xatolik yuz berdi",
+        });
+      case "timeOut":
+        return notification.error({
+          message: "Token muddati tugadi. Iltimos, qayta tizimga kiring.",
+        });
       default:
         break;
     }

@@ -1,15 +1,22 @@
 import React, { useState } from "react";
 import { Checkbox, Form, Input } from "antd";
 import useAxios from "../../../hook/useAxios";
+import notificationApi from "../../generic/notification";
+import { useNavigate } from "react-router-dom";
 const googleSvg = "/public/google29.png";
 const facebookSvg = "/facebook.svg";
 
 function Login() {
   const [number, setNumber] = useState("");
   const [password, setPassword] = useState("");
+  const notify = notificationApi();
   const axios = useAxios();
-
+  const navigate = useNavigate();
   const getUserData = () => {
+    if (!number || !password) {
+      return notify({ type: "pustoy" });
+    }
+
     const userData = {
       phone: `+998${number}`,
       password: password,
@@ -19,8 +26,36 @@ function Login() {
       method: "POST",
       data: userData,
     })
-      .then((data) => console.log(data, "datalogin"))
-      .catch((error) => console.log(error, "dataerror"));
+      .then((data) => {
+        console.log(data, "datalogin");
+
+        if (data?.access) {
+          const accessToken = data?.access;
+          const refreshToken = data?.refresh;
+
+          const chechTime = Date.now() + 3 * 60 * 1000;
+
+          localStorage.setItem("token", accessToken);
+          localStorage.setItem("refreshToken", refreshToken);
+          localStorage.setItem("time", chechTime);
+          notify({ type: "login" });
+          navigate("/home");
+          setTimeout(() => {
+            console.log("Token muddati tugadi");
+            localStorage.removeItem("token");
+            localStorage.removeItem("refreshToken");
+            localStorage.removeItem("time");
+            navigate("/");
+            notify({ type: "timeOut" });
+          }, 3 * 60 * 1000);
+        } else {
+          notify({ type: "errLogin" });
+        }
+      })
+      .catch((error) => {
+        console.log(error, "dataerror");
+        notify({ type: "set" });
+      });
 
     console.log(userData);
   };
