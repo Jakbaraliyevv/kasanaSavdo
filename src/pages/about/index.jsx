@@ -1,13 +1,11 @@
 import React from "react";
 
-function Home() {
-
-    
+function About() {
   return (
     <section className="w-[90%]  m-auto">
-      <h1 className="text-[19px]">Home</h1>
+      <h1 className="text-[19px]">About</h1>
     </section>
   );
 }
 
-export default Home;
+export default About;
