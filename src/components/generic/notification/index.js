@@ -1,7 +1,7 @@
 import { notification } from "antd";
 
 const notificationApi = () => {
-  const notify = ({ type, text, catchErorror }) => {
+  const notify = ({ type, text, catchErorror, verify }) => {
     switch (type) {
       case "register":
         return notification.success({
@@ -34,6 +34,14 @@ const notificationApi = () => {
       case "timeOut":
         return notification.error({
           message: "Token muddati tugadi. Iltimos, qayta tizimga kiring.",
+        });
+      case "verifyError":
+        return notification.error({
+          message: verify,
+        });
+      case "success":
+        return notification.error({
+          message: "Ro‘yxatdan o‘tish muvaffaqiyatli !",
         });
       default:
         break;

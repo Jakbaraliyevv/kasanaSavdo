@@ -2,20 +2,19 @@ import React, { useState } from "react";
 
 import { Flex, Form, Input, notification } from "antd";
 import useAxios from "../../../hook/useAxios";
+import notificationApi from "../../generic/notification";
+import { useNavigate } from "react-router-dom";
 
 function Verify() {
   const [number, setNumbur] = useState("");
   const [code, setCode] = useState("");
 
   const axios = useAxios();
-
+  const notifym = notificationApi();
+  const navigate = useNavigate();
   const getValue = () => {
     if (!number.trim() || !code.trim()) {
-      return notification.error({
-        message: "Xatolik",
-        description: "Iltimos, barcha maydonlarni to‘ldiring!",
-        duration: 3,
-      });   
+      return notifym({ type: "pustoy" });
     }
     const userData = {
       phone: `+998${number}`,
@@ -28,16 +27,20 @@ function Verify() {
       data: userData,
     })
       .then((data) => {
-        console.log(data);
+        console.log(data, "Server javobi");
 
-        const errorMessages = data?.errors?.map((data) => data.code).join("\n");
-
-        notification.error({
-          message: "Xatolik!",
-          description: errorMessages || "Noma’lum xatolik!",
-          duration: 3,
-        });
+        if (data?.status === "ok") {
+          navigate("/");
+          notifym({
+            type: "success",
+            message: "Ro‘yxatdan o‘tish muvaffaqiyatli!",
+          });
+        } else {
+          const errorMessages = data?.errors?.map((e) => e.code).join("\n");
+          notifym({ type: "verifyError", verify: errorMessages });
+        }
       })
+
       .catch((error) => {
         console.log(error);
       });
