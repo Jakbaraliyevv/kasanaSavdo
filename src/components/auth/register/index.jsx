@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Checkbox, Form, Input, notification } from "antd";
 import useAxios from "../../../hook/useAxios";
 import { useNavigate } from "react-router-dom";
+import notificationApi from "../../generic/notification";
 const googleSvg = "/public/google29.png";
 const facebookSvg = "/facebook.svg";
 
@@ -11,13 +12,11 @@ function Register() {
   const navigate = useNavigate();
   const axios = useAxios();
 
+  const notify = notificationApi();
+
   const getValue = () => {
     if (!number || !password) {
-      return notification.error({
-        message: "Xatolik",
-        description: "Iltimos, barcha maydonlarni to‘ldiring!",
-        duration: 3,
-      });
+      return notify({ type: "pustoy" });
     }
     const userData = {
       password: password,
@@ -34,26 +33,17 @@ function Register() {
             .map(([key, value]) => `${value?.[0]}`)
             .join("\n");
 
-          notification.error({
-            message: "Xatolik",
-            description: errorMessages,
-            duration: 3,
-          });
+          notify({ type: "errorMessage", text: errorMessages });
         } else {
           navigate("/verifly");
-          notification.success({
-            message: "Muvaffaqiyatli!",
-            description: "Siz ro‘yxatdan muvaffaqiyatli o‘tdingiz!",
-            duration: 3,
-          });
+          notify({ type: "register" });
         }
       })
       .catch((error) => {
         console.log("Xato kettida:", error);
-        notification.error({
-          message: "Xatolik",
-          description: error.response?.data?.message || "Noma'lum xatolik!",
-          duration: 3,
+        notify({
+          type: "catchError",
+          catchErorror: error.response?.data?.message,
         });
       });
   };
