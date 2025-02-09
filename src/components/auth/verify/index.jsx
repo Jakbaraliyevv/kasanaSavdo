@@ -1,26 +1,47 @@
-import React from "react";
+import React, { useState } from "react";
 
-import { Flex, Form, Input } from "antd";
+import { Flex, Form, Input, notification } from "antd";
+import useAxios from "../../../hook/useAxios";
 
 function Verify() {
-  const onChange = (text) => {
-    console.log("onChange:", text);
-  };
-  const onInput = (value) => {
-    console.log("onInput:", value);
-  };
-  const sharedProps = {
-    onChange,
-    onInput,
-  };
+  const [number, setNumbur] = useState("");
+  const [code, setCode] = useState("");
 
-  // verfly tepadagi cod
+  const axios = useAxios();
 
-  const onFinish = (values) => {
-    console.log("Success:", values);
-  };
-  const onFinishFailed = (errorInfo) => {
-    console.log("Failed:", errorInfo);
+  const getValue = () => {
+    if (!number.trim() || !code.trim()) {
+      return notification.error({
+        message: "Xatolik",
+        description: "Iltimos, barcha maydonlarni to‘ldiring!",
+        duration: 3,
+      });   
+    }
+    const userData = {
+      phone: `+998${number}`,
+      code: code,
+    };
+
+    axios({
+      url: "/api/accounts/register/step2/",
+      method: "POST",
+      data: userData,
+    })
+      .then((data) => {
+        console.log(data);
+
+        const errorMessages = data?.errors?.map((data) => data.code).join("\n");
+
+        notification.error({
+          message: "Xatolik!",
+          description: errorMessages || "Noma’lum xatolik!",
+          duration: 3,
+        });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+    console.log(userData, "userData");
   };
 
   return (
@@ -34,8 +55,6 @@ function Verify() {
         initialValues={{
           remember: true,
         }}
-        onFinish={onFinish}
-        onFinishFailed={onFinishFailed}
         autoComplete="off"
       >
         <Form.Item
@@ -49,6 +68,7 @@ function Verify() {
           ]}
         >
           <Input
+            onChange={(e) => setNumbur(e.target.value)}
             type="number"
             placeholder="Enter your number"
             addonBefore="+998"
@@ -57,15 +77,19 @@ function Verify() {
 
         <Flex gap="middle" align="flex-center" justify="center" vertical>
           <h3 className="text-black">Tasdiqlash kodini kiriting :</h3>
+
           <Input.OTP
             length={5}
-            formatter={(str) => str.toUpperCase()}
-            onChange={onChange}
+            value={code}
+            onChange={(value) => setCode(value)}
           />
         </Flex>
 
         <Form.Item label={null}>
-          <button className="w-full bg-blue-500 h-[33px] mt-7 rounded-md text-[#FFF] text-[17px]">
+          <button
+            onClick={() => getValue()}
+            className="w-full bg-blue-500 h-[33px] mt-7 rounded-md text-[#FFF] text-[17px]"
+          >
             Submit
           </button>
         </Form.Item>
