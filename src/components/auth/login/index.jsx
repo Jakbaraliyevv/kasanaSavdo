@@ -1,14 +1,28 @@
-import React from "react";
+import React, { useState } from "react";
 import { Checkbox, Form, Input } from "antd";
+import useAxios from "../../../hook/useAxios";
 const googleSvg = "/public/google29.png";
 const facebookSvg = "/facebook.svg";
 
 function Login() {
-  const onFinish = (values) => {
-    console.log("Success:", values);
-  };
-  const onFinishFailed = (errorInfo) => {
-    console.log("Failed:", errorInfo);
+  const [number, setNumber] = useState("");
+  const [password, setPassword] = useState("");
+  const axios = useAxios();
+
+  const getUserData = () => {
+    const userData = {
+      phone: `+998${number}`,
+      password: password,
+    };
+    axios({
+      url: "/api/accounts/sign-in/",
+      method: "POST",
+      data: userData,
+    })
+      .then((data) => console.log(data, "datalogin"))
+      .catch((error) => console.log(error, "dataerror"));
+
+    console.log(userData);
   };
 
   const icon_style =
@@ -24,8 +38,6 @@ function Login() {
         initialValues={{
           remember: true,
         }}
-        onFinish={onFinish}
-        onFinishFailed={onFinishFailed}
         autoComplete="off"
       >
         <Form.Item
@@ -39,6 +51,7 @@ function Login() {
           ]}
         >
           <Input
+            onChange={(e) => setNumber(e.target.value)}
             type="number"
             placeholder="Enter your number"
             addonBefore="+998"
@@ -55,7 +68,10 @@ function Login() {
             },
           ]}
         >
-          <Input.Password placeholder="Enter your password" />
+          <Input.Password
+            onChange={(e) => setPassword(e.target.value)}
+            placeholder="Enter your password"
+          />
         </Form.Item>
 
         <Form.Item name="remember" valuePropName="checked" label={null}>
@@ -63,7 +79,10 @@ function Login() {
         </Form.Item>
 
         <Form.Item label={null}>
-          <button className="w-full bg-blue-500 h-[33px] rounded-md text-[#FFF] text-[17px]">
+          <button
+            onClick={() => getUserData()}
+            className="w-full bg-blue-500 h-[33px] rounded-md text-[#FFF] text-[17px]"
+          >
             Submit
           </button>
         </Form.Item>
