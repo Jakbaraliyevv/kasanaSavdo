@@ -1,33 +1,61 @@
 import React, { useState } from "react";
-import { Checkbox, Form, Input } from "antd";
+import { Checkbox, Form, Input, notification } from "antd";
 import useAxios from "../../../hook/useAxios";
+import { useNavigate } from "react-router-dom";
 const googleSvg = "/public/google29.png";
 const facebookSvg = "/facebook.svg";
 
 function Register() {
   const [number, setNumber] = useState("");
   const [password, setPassword] = useState("");
-
+  const navigate = useNavigate();
   const axios = useAxios();
 
   const getValue = () => {
+    if (!number || !password) {
+      return notification.error({
+        message: "Xatolik",
+        description: "Iltimos, barcha maydonlarni to‘ldiring!",
+        duration: 3,
+      });
+    }
     const userData = {
       password: password,
       phone: `+998${number}`,
     };
-    console.log(userData);
     axios({
       url: "/api/accounts/register/step1/",
       method: "POST",
       data: userData,
     })
-      .then((data) =>
-        console.log(
-          "Xatolik tafsilotlari:",
-          JSON.stringify(data.errors, null, 2)
-        )
-      )
-      .catch((error) => console.log(error, "Xato kettida"));
+      .then((data) => {
+        if (data.errors) {
+          const errorMessages = Object.entries(data.errors)
+            .map(([key, value]) => `${value?.[0]}`)
+            .join("\n");
+
+          notification.error({
+            message: "Xatolik",
+            description: errorMessages,
+            duration: 3,
+          });
+        } else {
+          navigate("/verifly");
+          notification.success({
+            message: "Muvaffaqiyatli!",
+            description: "Siz ro‘yxatdan muvaffaqiyatli o‘tdingiz!",
+            duration: 3,
+          });
+        }
+      })
+      .catch((error) => {
+        console.log("Xato kettida:", error);
+        notification.error({
+          message: "Xatolik",
+          description: error.response?.data?.message || "Noma'lum xatolik!",
+          duration: 3,
+        });
+      });
   };
 
   const icon_style =
