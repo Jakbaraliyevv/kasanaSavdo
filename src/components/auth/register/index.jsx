@@ -3,12 +3,14 @@ import { Checkbox, Form, Input, notification } from "antd";
 import useAxios from "../../../hook/useAxios";
 import { useNavigate } from "react-router-dom";
 import notificationApi from "../../generic/notification";
+import { LoadingOutlined } from "@ant-design/icons";
 const googleSvg = "/public/google29.png";
 const facebookSvg = "/facebook.svg";
 
 function Register() {
   const [number, setNumber] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const axios = useAxios();
 
@@ -22,6 +24,8 @@ function Register() {
       password: password,
       phone: `+998${number}`,
     };
+
+    setLoading(true);
     axios({
       url: "/api/accounts/register/step1/",
       method: "POST",
@@ -33,7 +37,10 @@ function Register() {
             .map(([key, value]) => `${value?.[0]}`)
             .join("\n");
 
-          notify({ type: "errorMessage", text: errorMessages });
+          notify({
+            type: "errorMessage",
+            text: errorMessages.split(" ").splice(1, 3).join(' '),
+          });
         } else {
           navigate("/verifly");
         }
@@ -44,6 +51,9 @@ function Register() {
           type: "catchError",
           catchErorror: error.response?.data?.message,
         });
+      })
+      .finally(() => {
+        setLoading(false);
       });
   };
 
@@ -103,9 +113,11 @@ function Register() {
         <Form.Item label={null}>
           <button
             onClick={() => getValue()}
-            className="w-full bg-blue-500 h-[33px] rounded-md text-[#FFF] text-[17px]"
+            className={`w-full bg-blue-500 h-[33px] outline-none rounded-md text-[#FFF] text-[17px] ${
+              loading ? "opacity-75" : "opacity-100"
+            }`}
           >
-            Register
+            {loading ? <LoadingOutlined /> : " Register"}
           </button>
         </Form.Item>
       </Form>

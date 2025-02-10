@@ -40,7 +40,7 @@ const notificationApi = () => {
           message: verify,
         });
       case "success":
-        return notification.error({
+        return notification.success({
           message: "Ro‘yxatdan o‘tish muvaffaqiyatli !",
         });
       default:

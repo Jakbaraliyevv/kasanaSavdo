@@ -4,10 +4,12 @@ import { Flex, Form, Input } from "antd";
 import useAxios from "../../../hook/useAxios";
 import notificationApi from "../../generic/notification";
 import { useNavigate } from "react-router-dom";
+import { LoadingOutlined } from "@ant-design/icons";
 
 function Verify() {
   const [number, setNumbur] = useState("");
   const [code, setCode] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const axios = useAxios();
   const notifym = notificationApi();
@@ -21,6 +23,7 @@ function Verify() {
       code: code,
     };
 
+    setLoading(true);
     axios({
       url: "/api/accounts/register/step2/",
       method: "POST",
@@ -43,13 +46,15 @@ function Verify() {
 
       .catch((error) => {
         console.log(error);
+      })
+      .finally(() => {
+        setLoading(false);
       });
-    console.log(userData, "userData");
   };
 
   return (
-    <section className="w-[50%] m-auto flex items-center h-[100vh] justify-center flex-col">
-      <div className="w-[60%] bg-white shadow-[1px_4px_29px_rgba(0,0,0,0.1)] rounded-lg p-6 py-[80px]">
+    <section className="w-[30%] m-auto flex items-center h-[100vh] justify-center flex-col">
+      <div className="w-[100%] bg-white shadow-[1px_4px_29px_rgba(0,0,0,0.1)] rounded-lg p-6 py-[80px]">
         <div className="text-center pb-9">
           <h2 className="text-[19px] font-medium">Tasdiq codini kiriting !</h2>
         </div>
@@ -95,9 +100,11 @@ function Verify() {
           <Form.Item label={null}>
             <button
               onClick={() => getValue()}
-              className="w-full bg-blue-500 h-[33px] mt-7 rounded-md text-[#FFF] text-[17px]"
+              className={`w-full bg-blue-500 h-[33px] outline-none rounded-md text-[#FFF] text-[17px] mt-9 ${
+                loading ? "opacity-75" : "opacity-100"
+              }`}
             >
-              Submit
+              {loading ? <LoadingOutlined /> : "Submit"}
             </button>
           </Form.Item>
         </Form>
