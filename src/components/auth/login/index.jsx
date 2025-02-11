@@ -37,7 +37,7 @@ function Login() {
           const accessToken = data?.access;
           const refreshToken = data?.refresh;
 
-          const chechTime = Date.now() + 3 * 60   ("refreshToken", refreshToken);
+          const chechTime = Date.now() + 3 * 60("refreshToken", refreshToken);
           localStorage.setItem("time", chechTime);
           notify({ type: "login" });
           navigate("/home");
